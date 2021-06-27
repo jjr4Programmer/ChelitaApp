@@ -1,16 +1,11 @@
-# chelita_app
+# ChelitaApp
 
-A new Flutter project.
+Primer proyecto básico con Flutter, ChelitaApp fue creada para el uso personal en la venta de cervezas, o cualquier bebida. La app te ayudará a tener un control de tus ventas y pagos de tus distintos clientes.
 
-## Getting Started
+## Registro de clientes
+  
+ La app permite registrar clientes desde su ventana principal, cada cliente se muestra con el monto que adeuda en una lista en la ventana principal.
 
-This project is a starting point for a Flutter application.
+## Registro de pagos y pedidos
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+  Al hacer click sobre un cliente, nos mostrará la lista de pagos y pedidos que ha realizado con su fecha y hora, además, para poder diferenciar entre un pedido y un pago, se mostrará los eventos con distinto color, de ese modo podrá tener control en orden de los pedido y pagos.
