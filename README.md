@@ -28,3 +28,4 @@ La app crea una base de datos en el celular, de modo que puede hacer uso de ella
 
 * Registro de nombre, celular y dirección del cliente
 * Poder eliminar/editar un cliente
+* Modificación del costo de la cerveza
