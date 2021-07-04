@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chelita_app/pago.dart';
 import 'package:chelita_app/pedido.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,10 @@ class MyClientPageState extends StatefulWidget {
 }
 
 class _MyClientPageState extends State<MyClientPageState> {
+  FutureOr _stateUpdate(dynamic value) {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,8 +81,9 @@ class _MyClientPageState extends State<MyClientPageState> {
           return SimpleDialog(
             children: <Widget>[
               TextField(
-                decoration:
-                    new InputDecoration(labelText: "Cantidad de cervezas"),
+                decoration: InputDecoration(
+                    icon: Icon(Icons.liquor),
+                    labelText: "Cantidad de cervezas"),
                 keyboardType: TextInputType.number,
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly
@@ -104,7 +111,9 @@ class _MyClientPageState extends State<MyClientPageState> {
           return SimpleDialog(
             children: <Widget>[
               TextField(
-                decoration: new InputDecoration(labelText: "Ingrese monto"),
+                decoration: new InputDecoration(
+                    icon: Icon(Icons.monetization_on_outlined),
+                    labelText: "Ingrese monto"),
                 keyboardType: TextInputType.number,
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly
@@ -125,12 +134,16 @@ class _MyClientPageState extends State<MyClientPageState> {
   }
 
   showListPedidosPagos(BuildContext context, Cliente cliente) {
-    print("PedidosPagos");
     return FutureBuilder(
       future: widget.db.getAllEventosCliente(cliente.id),
       builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
+            if (snapshot.data.length == 0) {
+              return Center(
+                child: Text("No registra pedidos o pagos"),
+              );
+            }
             ListView view = ListView(
               children: <Widget>[
                 for (Evento ev in snapshot.data)
@@ -140,7 +153,7 @@ class _MyClientPageState extends State<MyClientPageState> {
                         'Cervezas: ' +
                             ev.cantidad.toString() +
                             ' / ' +
-                            ev.getFecha2() +
+                            ev.getFecha() +
                             ' ' +
                             ev.hora,
                         style: TextStyle(fontSize: 15.0),
@@ -150,14 +163,17 @@ class _MyClientPageState extends State<MyClientPageState> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15)),
                       onPressed: () {},
+                      onLongPress: () {
+                        _showDeletePedido(ev, cliente).then(_stateUpdate);
+                      },
                     )
                   else
-                    RaisedButton(
+                    OutlineButton(
                       child: Text(
-                        'Ingreso: ' +
+                        'Pago: ' +
                             ev.monto.toString() +
                             ' / ' +
-                            ev.getFecha2() +
+                            ev.getFecha() +
                             ' ' +
                             ev.hora,
                         style: TextStyle(fontSize: 18.0),
@@ -166,6 +182,9 @@ class _MyClientPageState extends State<MyClientPageState> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
                       onPressed: () {},
+                      onLongPress: () {
+                        _showDeletePago(ev, cliente).then(_stateUpdate);
+                      },
                     ),
               ],
             );
@@ -180,6 +199,83 @@ class _MyClientPageState extends State<MyClientPageState> {
             child: CircularProgressIndicator(),
           );
         }
+      },
+    );
+  }
+
+  Future<void> _showDeletePedido(Pedido pedido, Cliente cliente) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmar...'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Text('Está segura que desea eliminar el pedido?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Eliminar'),
+              onPressed: () {
+                print(" ------ Monto: " + pedido.monto.toString());
+                setState(() {
+                  cliente.deuda -= pedido.monto;
+                  widget.db.updateCliente(cliente);
+                  widget.db.deletePedido(pedido);
+                  Navigator.of(context).pop();
+                });
+              },
+            ),
+            TextButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showDeletePago(Pago pago, Cliente cliente) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmar...'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Text('Está segura que desea eliminar el pago?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Eliminar'),
+              onPressed: () {
+                setState(() {
+                  cliente.deuda += pago.monto;
+                  widget.db.updateCliente(cliente);
+                  widget.db.deletePago(pago);
+                  Navigator.of(context).pop();
+                });
+              },
+            ),
+            TextButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
       },
     );
   }

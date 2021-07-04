@@ -67,6 +67,11 @@ class _MyHomePageState extends State<MyHomePage> {
       future: db.getAllClientes(),
       builder: (BuildContext context, AsyncSnapshot<List<Cliente>> snapshot) {
         if (snapshot.hasData) {
+          if (snapshot.data.length == 0) {
+            return Center(
+              child: Text("Sin clientes"),
+            );
+          }
           return ListView(
             children: <Widget>[
               for (Cliente cliente in snapshot.data)
@@ -87,12 +92,15 @@ class _MyHomePageState extends State<MyHomePage> {
                             ));
                     Navigator.push(context, route).then(_stateUpdate);
                   },
+                  onLongPress: () {
+                    _showDeleteCliente(cliente).then(_stateUpdate);
+                  },
                 ),
             ],
           );
         } else {
           return Center(
-            child: Text("Sin clientes"),
+            child: Text("Cargando..."),
           );
         }
       },
@@ -101,5 +109,40 @@ class _MyHomePageState extends State<MyHomePage> {
 
   FutureOr _stateUpdate(dynamic value) {
     setState(() {});
+  }
+
+  Future<void> _showDeleteCliente(Cliente cliente) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmar...'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Text(
+                    'Está segura que desea eliminar a ' + cliente.nombre + '?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Confirmar'),
+              onPressed: () {
+                db.deleteCliente(cliente);
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

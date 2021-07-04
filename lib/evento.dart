@@ -3,7 +3,7 @@ class Evento {
   double monto;
   int cantidad;
 
-  String getFecha2() {
+  String getFecha() {
     var fechal = this.fecha.split('-');
     var fecha2 = fechal[2] + "-" + fechal[1];
     return fecha2;

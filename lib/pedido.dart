@@ -28,7 +28,7 @@ class Pedido extends Evento {
   Pedido.fromMap(Map<String, dynamic> map) {
     this.idCliente = map['cliente_id'];
     this.cantidad = map['cantidad'];
-    this.monto = map['monto'];
+    this.monto = map['costo'];
     this.fecha = map['fecha'];
     this.hora = map['hora'];
     this.id = map['id'];

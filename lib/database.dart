@@ -19,12 +19,24 @@ class ChelitaDatabase {
     });
   }
 
-  insertCliente(Cliente cliente) {
+  Future insertCliente(Cliente cliente) async {
     chelitappDb.insert("cliente", cliente.toMap());
   }
 
-  insertPedido(Pedido pedido) {
+  Future insertPedido(Pedido pedido) async {
     chelitappDb.insert("pedido", pedido.toMap());
+  }
+
+  Future deleteCliente(Cliente cliente) async {
+    chelitappDb.delete("cliente", where: "id=?", whereArgs: [cliente.id]);
+  }
+
+  Future deletePedido(Pedido pedido) async {
+    chelitappDb.delete("pedido", where: "id=?", whereArgs: [pedido.id]);
+  }
+
+  Future deletePago(Pago pago) async {
+    chelitappDb.delete("pago", where: "id=?", whereArgs: [pago.id]);
   }
 
   Future<List<dynamic>> getAllEventosCliente(int idCliente) async {
