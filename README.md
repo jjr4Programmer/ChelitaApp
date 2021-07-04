@@ -26,8 +26,7 @@ La app crea una base de datos en el celular, de modo que puede hacer uso de ella
 
 ## Propuestas para la siguiente versión
 
-* Registro de nombre, celular y dirección del cliente
-* Poder eliminar/editar un cliente
+* Registro de nombre y celular del cliente
 * Modificación del costo de la cerveza
 
 <div>Iconos diseñados por <a href="https://www.flaticon.es/autores/good-ware" title="Good Ware">Good Ware</a> from <a href="https://www.flaticon.es/" title="Flaticon">www.flaticon.es</a></div>
