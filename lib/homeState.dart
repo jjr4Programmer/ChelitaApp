@@ -75,14 +75,11 @@ class _MyHomePageState extends State<MyHomePage> {
           return ListView(
             children: <Widget>[
               for (Cliente cliente in snapshot.data)
-                OutlineButton(
+                OutlinedButton(
                   child: Text(
                     cliente.nombre + ' / Deuda: ' + cliente.deuda.toString(),
                     style: TextStyle(fontSize: 20.0),
                   ),
-                  highlightedBorderColor: Colors.red,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
                   onPressed: () {
                     Route route = MaterialPageRoute(
                         builder: (context) => MyClientPageState(

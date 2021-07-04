@@ -148,7 +148,7 @@ class _MyClientPageState extends State<MyClientPageState> {
               children: <Widget>[
                 for (Evento ev in snapshot.data)
                   if (ev.tipo == 'pedido')
-                    OutlineButton(
+                    OutlinedButton(
                       child: Text(
                         'Cervezas: ' +
                             ev.cantidad.toString() +
@@ -158,17 +158,13 @@ class _MyClientPageState extends State<MyClientPageState> {
                             ev.hora,
                         style: TextStyle(fontSize: 15.0),
                       ),
-                      hoverColor: Colors.blue,
-                      highlightedBorderColor: Colors.red,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
                       onPressed: () {},
                       onLongPress: () {
                         _showDeletePedido(ev, cliente).then(_stateUpdate);
                       },
                     )
                   else
-                    OutlineButton(
+                    OutlinedButton(
                       child: Text(
                         'Pago: ' +
                             ev.monto.toString() +
@@ -178,9 +174,6 @@ class _MyClientPageState extends State<MyClientPageState> {
                             ev.hora,
                         style: TextStyle(fontSize: 18.0),
                       ),
-                      textColor: Colors.red,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
                       onPressed: () {},
                       onLongPress: () {
                         _showDeletePago(ev, cliente).then(_stateUpdate);
